@@ -16,6 +16,7 @@ from aiogram.types import (
 )
 
 from app.database import get_database_connection
+from app.handlers.start import get_main_keyboard
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
@@ -28,21 +29,21 @@ class SurveyState(StatesGroup):
 
 # Тексты кнопок
 BUTTON_TEXTS = {
-    1: "печалька(1)",
-    2: "грусть(2)",
-    3: "безразличие(3)",
-    4: "хорошо(4)",
-    5: "отлично(5)",
+    1: "😭",
+    2: "🙁",
+    3: "😐",
+    4: "🙂",
+    5: "🤩",
 }
 
 # Кнопки
 keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text=BUTTON_TEXTS[1])],
-        [KeyboardButton(text=BUTTON_TEXTS[2])],
-        [KeyboardButton(text=BUTTON_TEXTS[3])],
-        [KeyboardButton(text=BUTTON_TEXTS[4])],
-        [KeyboardButton(text=BUTTON_TEXTS[5])],
+        [KeyboardButton(text=BUTTON_TEXTS[1]),
+        KeyboardButton(text=BUTTON_TEXTS[2]),
+        KeyboardButton(text=BUTTON_TEXTS[3]),
+        KeyboardButton(text=BUTTON_TEXTS[4]),
+        KeyboardButton(text=BUTTON_TEXTS[5])],
     ],
     resize_keyboard=True,
 )
