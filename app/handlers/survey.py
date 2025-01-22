@@ -279,7 +279,8 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
                 mood,
             )
             await message.reply(
-                f"Спасибо за ваш ответ! Ваше настроение: {BUTTON_TEXTS[mood]}"
+                f"Спасибо за ваш ответ! Ваше настроение: {BUTTON_TEXTS[mood]}",
+                reply_markup=get_main_keyboard(),  # Отправляем клавиатуру с командами
             )
 
             # Завершаем опрос, удаляем состояние
@@ -288,13 +289,17 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
         except Exception as e:
             logger.error(f"Ошибка при сохранении в БД: {e}")
             await message.reply(
-                "Произошла ошибка при сохранении вашего ответа. Пожалуйста, попробуйте позже."
+                "Произошла ошибка при сохранении вашего ответа. Пожалуйста, попробуйте позже.",
+                reply_markup=get_main_keyboard(),  # Отправляем клавиатуру с командами
             )
     else:
         logger.warning(
             f"Пользователь {message.from_user.id} выбрал неверный вариант: {message.text}"
         )
-        await message.reply("Пожалуйста, выберите один из предложенных смайликов.")
+        await message.reply(
+            "Пожалуйста, выберите один из предложенных смайликов.",
+            reply_markup=get_main_keyboard(),  # Отправляем клавиатуру с командами
+        )
 
 
 # Регистрируем хэндлеры
