@@ -1,7 +1,9 @@
-from aiogram import Dispatcher
-from aiogram.types import Message, CallbackQuery
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from datetime import time
+
+from aiogram import Dispatcher
+from aiogram.types import CallbackQuery, Message
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 from app.database import get_database_connection
 
 
@@ -76,9 +78,7 @@ async def adjust_minute(callback: CallbackQuery):
     action, current_hour, current_minute = (
         callback.data.split(":")[0],
         int(callback.data.split(":")[2]),
-        int(
-            callback.data.split(":")[3]
-        ),  # Теперь минут тоже передаются в callback_data
+        int(callback.data.split(":")[3]),
     )
 
     keyboard = time_picker_keyboard(current_hour, current_minute, action)
@@ -100,13 +100,8 @@ async def confirm_time(callback: CallbackQuery):
     current_hour = int(data[2])
     current_minute = int(data[3])
 
-    # Формируем время
-    time_str = f"{current_hour}:{current_minute}"
-    # Добавляем ':00' если секунд нет
-    if len(time_str.split(":")) == 2:
-        time_str += ":00"
-    if len(time_str.split(":")[0]) != 2:
-        time_str = f"0{time_str}"
+    # Формируем время с ведущими нулями
+    time_str = f"{current_hour:02d}:{current_minute:02d}:00"  # Всегда добавляем секунды
     selected_time = time.fromisoformat(time_str)
 
     if action == "register":

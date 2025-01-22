@@ -1,4 +1,5 @@
 from aiogram import Dispatcher, types
+from aiogram.filters import Command
 
 
 async def start_handlers(message: types.Message):
@@ -8,4 +9,4 @@ async def start_handlers(message: types.Message):
 
 
 def register_handlers(dp: Dispatcher):
-    dp.register_message_handler(start_handler, commands=["start"])
+    dp.message.register(start_handlers, Command("start"))

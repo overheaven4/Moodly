@@ -1,9 +1,10 @@
+from datetime import datetime, time
+
 from pydantic import BaseModel
-from datetime import time, datetime
 
 
 class UserModel(BaseModel):
-    id: int  # Telegram ID пользователя
+    id: int
     notification_time: time
     created_at: datetime
     updated_at: datetime
