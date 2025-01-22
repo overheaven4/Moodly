@@ -6,8 +6,10 @@ CREATE_USERS_TABLE = """
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT PRIMARY KEY,
     notification_time TIME NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
 );
+
 """
 
 
@@ -29,3 +31,8 @@ async def setup_database():
         print("Таблицы созданы.")
     finally:
         await conn.close()
+
+
+async def get_database_connection():
+    conn = await connect(config.DATABASE_URL)
+    return conn

@@ -1,7 +1,7 @@
 from aiogram import Dispatcher, types
 
 
-async def start_handler(message: types.Message):
+async def start_handlers(message: types.Message):
     await message.reply(
         "Добро пожаловать! Я помогу отслеживать ваше эмоциональное состояние."
     )
