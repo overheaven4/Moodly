@@ -1,14 +1,16 @@
 import asyncio
+import logging
+
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message
 from aiogram.filters import Command
+from aiogram.fsm.middleware import FSMContextMiddleware
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import Message
+
 from app.bot import bot
 from app.database import setup_database
+from app.handlers import register, settings, start, survey, time_picker
 from app.scheduler import setup_scheduler
-from app.handlers import start, register, settings, survey, time_picker
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.fsm.middleware import FSMContextMiddleware
-import logging
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
