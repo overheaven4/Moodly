@@ -1,19 +1,16 @@
-[project]
-name = "emdr-project"
+[tool.poetry]
+name = "moodly"
 version = "0.1.0"
 description = "Emotions Dairy Telegram-Bot Project"
-authors = [
-    {name = "Artem Berdnikov"}
-]
+authors = ["Artem Berdnikov"]
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "sqlalchemy (>=2.0.36,<3.0.0)",
-    "aiogram (>=3.17.0,<4.0.0)",
-    "pytelegrambotapi (>=4.26.0,<5.0.0)"
-]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytelegrambotapi = "^4.26.0"
+python-dotenv = "^1.0.1"
 
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
