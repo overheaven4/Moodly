@@ -1,12 +1,19 @@
+import io
 import logging
 import statistics
 from datetime import datetime, timedelta
 
+import matplotlib.pyplot as plt
 from aiogram import Dispatcher, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import (
+    BufferedInputFile,
+    InputFile,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+)
 
 from app.database import get_database_connection
 
@@ -39,6 +46,36 @@ keyboard = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True,
 )
+
+
+async def create_mood_chart(results):
+    """
+    Создает график настроения за последнюю неделю.
+    Возвращает изображение в виде байтов.
+    """
+    if not results:
+        return None
+
+    # Подготовка данных
+    dates = [row["created_at"] for row in results]
+    moods = [row["answer"] for row in results]
+
+    # Создание графика
+    plt.figure(figsize=(10, 5))
+    plt.plot(dates, moods, marker="o", linestyle="-", color="b")
+    plt.title("График настроения за неделю")
+    plt.xlabel("Дата")
+    plt.ylabel("Настроение")
+    plt.yticks(range(1, 6), [BUTTON_TEXTS[i] for i in range(1, 6)])  # Подписи для оси Y
+    plt.grid(True)
+
+    # Сохранение графика в байты
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+    buf.seek(0)
+    plt.close()
+
+    return buf
 
 
 async def calculate_mood_trend(results):
@@ -111,7 +148,7 @@ async def calculate_weighted_average(results):
 
 async def send_stats(message: types.Message):
     """
-    Отправляет расширенную статистику настроений за последнюю неделю.
+    Отправляет расширенную статистику настроений за последнюю неделю и график.
     """
     db = await get_database_connection()
     try:
@@ -158,6 +195,16 @@ async def send_stats(message: types.Message):
                 f"Эмоциональная стабильность: {stability_text}"
             )
             await message.reply(message_text)
+
+            # Создаем и отправляем график
+            chart = await create_mood_chart(results)
+            if chart:
+                await message.answer_photo(
+                    photo=BufferedInputFile(
+                        chart.getvalue(), filename="mood_chart.png"
+                    ),
+                    caption="График вашего настроения за неделю:",
+                )
         else:
             await message.reply("У вас нет записей за последнюю неделю.")
     except Exception as e:
