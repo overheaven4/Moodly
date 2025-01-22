@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from app.bot import bot
 from app.database import setup_database
 from app.scheduler import setup_scheduler
-from app.handlers import start, register, settings, survey
+from app.handlers import start, register, settings, survey, time_picker
 
 
 async def main():
@@ -20,12 +20,13 @@ async def main():
     dp.message.register(register.register_start, Command("register"))
     dp.message.register(settings.change_time_start, Command("change_time"))
     dp.message.register(survey.survey_handler, Command("survey"))
+    time_picker.register_handlers(dp)
 
     dp.callback_query.register(
-        register.register_time, lambda c: c.data.startswith("register:")
+        register.register_start, lambda c: c.data.startswith("register:")
     )
     dp.callback_query.register(
-        settings.change_time, lambda c: c.data.startswith("change_time:")
+        settings.change_time_start, lambda c: c.data.startswith("change_time:")
     )
 
     # Настройка планировщика
