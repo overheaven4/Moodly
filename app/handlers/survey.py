@@ -8,14 +8,11 @@ from aiogram import Dispatcher, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import (
-    BufferedInputFile,
-    InputFile,
-    KeyboardButton,
-    ReplyKeyboardMarkup,
-)
+from aiogram.types import (BufferedInputFile, InputFile, KeyboardButton,
+                           ReplyKeyboardMarkup)
 
 from app.database import get_database_connection
+from app.handlers.start import get_main_keyboard
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
