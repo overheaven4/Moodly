@@ -26,7 +26,7 @@ async def send_daily_survey():
                 and now.minute == notification_time.minute
             ):
                 await bot.send_message(
-                    user_id, "Ваш ежедневный опрос: Как вы себя чувствуете сегодня?"
+                    user_id, "Самое время пройти ежедневный опрос!\nИспользуйте команду /survey",
                 )
     except Exception as e:
         print(f"Ошибка при отправке ежедневного опроса: {e}")

@@ -299,7 +299,7 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
         )
         await message.reply(
             "Пожалуйста, выберите один из предложенных смайликов.",
-            reply_markup=get_main_keyboard(),  # Отправляем клавиатуру с командами
+            reply_markup=keyboard,  # Отправляем клавиатуру со смайликами
         )
 
 

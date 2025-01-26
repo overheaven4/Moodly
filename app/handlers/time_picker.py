@@ -14,34 +14,51 @@ def time_picker_keyboard(
     builder = InlineKeyboardBuilder()
 
     # Часы
+    builder.button(
+        text="-4️ч",
+        callback_data=f"{action}:adjust_hour:{current_hour - 4}:{current_minute}",
+    )    
+    builder.button(
+        text="-1️ч",
+        callback_data=f"{action}:adjust_hour:{current_hour - 1}:{current_minute}",
+    )    
     builder.button(text=f"Часы: {current_hour}", callback_data="noop")
     builder.button(
-        text="➖",
-        callback_data=f"{action}:adjust_hour:{current_hour - 1}:{current_minute}",
-    )
-    builder.button(
-        text="➕",
+        text="+1️ч",
         callback_data=f"{action}:adjust_hour:{current_hour + 1}:{current_minute}",
     )
-    builder.adjust(3)
+    builder.button(
+        text="+4️ч",
+        callback_data=f"{action}:adjust_hour:{current_hour + 4}:{current_minute}",
+    )
+    builder.adjust(5)
 
     # Минуты
-    builder.button(text=f"Минуты: {current_minute}", callback_data="noop")
     builder.button(
-        text="➖",
+        text="-1️5️м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 15) % 60}",
     )
     builder.button(
-        text="➕",
+        text="-5м",
+        callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 5) % 60}",
+    )
+    builder.button(text=f"Мин: {current_minute}", callback_data="noop")
+    builder.button(
+        text="+5️м",
+        callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute + 5) % 60}",
+    )
+    builder.button(
+        text="+1️5️м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute + 15) % 60}",
     )
-    builder.adjust(3)
+    builder.adjust(5)
 
     # Подтвердить выбор
     builder.button(
         text="✅ Подтвердить",
         callback_data=f"confirm_time:{action}:{current_hour}:{current_minute}",
     )
+    builder.adjust(5)
 
     return builder
 
@@ -62,7 +79,7 @@ async def adjust_hour(callback: CallbackQuery):
     action, current_hour, current_minute = (
         callback.data.split(":")[0],
         int(callback.data.split(":")[2]),
-        0,
+        int(callback.data.split(":")[3]),
     )
 
     keyboard = time_picker_keyboard(current_hour % 24, current_minute, action)
