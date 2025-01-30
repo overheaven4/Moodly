@@ -43,7 +43,6 @@ BUTTON_TEXTS = {
 # Кнопки
 keyboard = ReplyKeyboardMarkup(
     keyboard=[
-<<<<<<< HEAD
         [
             KeyboardButton(text=BUTTON_TEXTS[1]),
             KeyboardButton(text=BUTTON_TEXTS[2]),
@@ -51,13 +50,6 @@ keyboard = ReplyKeyboardMarkup(
             KeyboardButton(text=BUTTON_TEXTS[4]),
             KeyboardButton(text=BUTTON_TEXTS[5]),
         ],
-=======
-        [KeyboardButton(text=BUTTON_TEXTS[1]),
-        KeyboardButton(text=BUTTON_TEXTS[2]),
-        KeyboardButton(text=BUTTON_TEXTS[3]),
-        KeyboardButton(text=BUTTON_TEXTS[4]),
-        KeyboardButton(text=BUTTON_TEXTS[5])],
->>>>>>> 48fc76655864b90c08ad86dda85b302f82fb78be
     ],
     resize_keyboard=True,
 )
