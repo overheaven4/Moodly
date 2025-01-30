@@ -4,18 +4,26 @@ import statistics
 from datetime import datetime, timedelta
 
 import matplotlib.pyplot as plt
+import mplcyberpunk
 from aiogram import Dispatcher, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import (BufferedInputFile, InputFile, KeyboardButton,
-                           ReplyKeyboardMarkup)
+from aiogram.types import (
+    BufferedInputFile,
+    InputFile,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+)
 
 from app.database import get_database_connection
 from app.handlers.start import get_main_keyboard
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
+
+# Применение стиля Cyberpunk
+plt.style.use("cyberpunk")
 
 
 # Определяем состояние для опроса
@@ -25,21 +33,23 @@ class SurveyState(StatesGroup):
 
 # Тексты кнопок
 BUTTON_TEXTS = {
-    1: "печалька(1)",
-    2: "грусть(2)",
-    3: "безразличие(3)",
-    4: "хорошо(4)",
-    5: "отлично(5)",
+    1: "😭",
+    2: "🙁",
+    3: "😐",
+    4: "🙂",
+    5: "🤩",
 }
 
 # Кнопки
 keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text=BUTTON_TEXTS[1])],
-        [KeyboardButton(text=BUTTON_TEXTS[2])],
-        [KeyboardButton(text=BUTTON_TEXTS[3])],
-        [KeyboardButton(text=BUTTON_TEXTS[4])],
-        [KeyboardButton(text=BUTTON_TEXTS[5])],
+        [
+            KeyboardButton(text=BUTTON_TEXTS[1]),
+            KeyboardButton(text=BUTTON_TEXTS[2]),
+            KeyboardButton(text=BUTTON_TEXTS[3]),
+            KeyboardButton(text=BUTTON_TEXTS[4]),
+            KeyboardButton(text=BUTTON_TEXTS[5]),
+        ],
     ],
     resize_keyboard=True,
 )
@@ -65,7 +75,8 @@ async def create_mood_chart(results):
     plt.ylabel("Настроение")
     plt.yticks(range(1, 6), [BUTTON_TEXTS[i] for i in range(1, 6)])  # Подписи для оси Y
     plt.grid(True)
-
+    # Добавление эффектов Cyberpunk
+    mplcyberpunk.add_glow_effects()
     # Сохранение графика в байты
     buf = io.BytesIO()
     plt.savefig(buf, format="png")
@@ -295,7 +306,7 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
         )
         await message.reply(
             "Пожалуйста, выберите один из предложенных смайликов.",
-            reply_markup=get_main_keyboard(),  # Отправляем клавиатуру с командами
+            reply_markup=keyboard,  # Отправляем клавиатуру со смайликами
         )
 
 
