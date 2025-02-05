@@ -39,6 +39,14 @@ BUTTON_TEXTS = {
     5: "🤩",
 }
 
+BUTTON_TEXTS2 = {
+    1: "ужасно",
+    2: "плохо",
+    3: "нормально",
+    4: "хорошо",
+    5: "отлично",
+}
+
 # Кнопки
 keyboard = ReplyKeyboardMarkup(
     keyboard=[
@@ -66,11 +74,10 @@ async def create_mood_chart(results):
     plt.title("График настроения за неделю")
     plt.xlabel("Дата")
     plt.ylabel("Настроение")
-    plt.yticks(range(1, 6), [BUTTON_TEXTS[i] for i in range(1, 6)]) 
+    plt.yticks(range(1, 6), [BUTTON_TEXTS2[i] for i in range(1, 6)]) 
     plt.grid(True)
-    # Добавление эффектов Cyberpunk
     mplcyberpunk.make_lines_glow()
-    mplcyberpunk.add_underglow()
+    mplcyberpunk.add_gradient_fill(alpha_gradientglow=0.38)
     buf = io.BytesIO()
     plt.savefig(buf, format="png")
     buf.seek(0)
