@@ -2,7 +2,6 @@ import io
 import logging
 import statistics
 from datetime import datetime, timedelta
-import locale
 
 import matplotlib.pyplot as plt
 import mplcyberpunk
@@ -25,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 # Применение стиля Cyberpunk
 plt.style.use("cyberpunk")
-locale.setlocale(locale.LC_TIME, 'ru_RU')
 
 class SurveyState(StatesGroup):
     in_progress = State()
@@ -46,6 +44,19 @@ BUTTON_TEXTS2 = {
     4: "хорошо",
     5: "отлично",
 }
+
+WEEKDAYS = {
+    "Mon": "Пн",
+    "Tue": "Вт",
+    "Wed": "Ср",
+    "Thu": "Чт",
+    "Fri": "Пт",
+    "Sat": "Сб",
+    "Sun": "Вс",
+}
+
+crat = "created_at"
+a = "%a"
 
 # Кнопки
 keyboard = ReplyKeyboardMarkup(
@@ -158,7 +169,7 @@ async def send_stats(message: types.Message):
         if results:
             stats = "\n".join(
                 [
-                    f"{row['created_at'].strftime('%a %d.%m, %H:%M')} - {BUTTON_TEXTS[row['answer']]}"
+                    f"{row[crat].strftime(f'{WEEKDAYS[row[crat].strftime(a)]} %d.%m, %H:%M')} - {BUTTON_TEXTS[row['answer']]}"
                     for row in results
                 ]
             )
