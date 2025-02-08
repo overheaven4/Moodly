@@ -62,11 +62,19 @@ a = "%a"
 keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
+<<<<<<< HEAD
         KeyboardButton(text=BUTTON_TEXTS[1]),
         KeyboardButton(text=BUTTON_TEXTS[2]),
         KeyboardButton(text=BUTTON_TEXTS[3]),
         KeyboardButton(text=BUTTON_TEXTS[4]),
         KeyboardButton(text=BUTTON_TEXTS[5])
+=======
+            KeyboardButton(text=BUTTON_TEXTS[1]),
+            KeyboardButton(text=BUTTON_TEXTS[2]),
+            KeyboardButton(text=BUTTON_TEXTS[3]),
+            KeyboardButton(text=BUTTON_TEXTS[4]),
+            KeyboardButton(text=BUTTON_TEXTS[5]),
+>>>>>>> 803ed3c (repair)
         ],
     ],
     resize_keyboard=True,
