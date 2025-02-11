@@ -13,36 +13,14 @@ def time_picker_keyboard(
 ) -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
 
-    # Часы
-    builder.button(
-        text="-4ч",
-        callback_data=f"{action}:adjust_hour:{current_hour - 4}:{current_minute}",
-    )    
-    builder.button(
-        text="-1ч",
-        callback_data=f"{action}:adjust_hour:{current_hour - 1}:{current_minute}",
-    )    
-    builder.button(text=f"Часы: {current_hour}", callback_data="noop")
-    builder.button(
-        text="+1ч",
-        callback_data=f"{action}:adjust_hour:{current_hour + 1}:{current_minute}",
-    )
     builder.button(
         text="+4ч",
         callback_data=f"{action}:adjust_hour:{current_hour + 4}:{current_minute}",
     )
-    builder.adjust(5)
-
-    # Минуты
     builder.button(
-        text="-15м",
-        callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 15) % 60}",
+        text="+1ч",
+        callback_data=f"{action}:adjust_hour:{current_hour + 1}:{current_minute}",
     )
-    builder.button(
-        text="-5м",
-        callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 5) % 60}",
-    )
-    builder.button(text=f"Мин: {current_minute}", callback_data="noop")
     builder.button(
         text="+5м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute + 5) % 60}",
@@ -51,15 +29,36 @@ def time_picker_keyboard(
         text="+15м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute + 15) % 60}",
     )
-    builder.adjust(5)
+    builder.adjust(4)
+
+    builder.button(text=f"Часы: {current_hour}", callback_data="noop")
+    builder.button(text=f"Мин: {current_minute}", callback_data="noop")
+    builder.adjust(2)
+
+    builder.button(
+        text="-4ч",
+        callback_data=f"{action}:adjust_hour:{current_hour - 4}:{current_minute}",
+    )    
+    builder.button(
+        text="-1ч",
+        callback_data=f"{action}:adjust_hour:{current_hour - 1}:{current_minute}",
+    )   
+    builder.button(
+        text="-5м",
+        callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 5) % 60}",
+    ) 
+    builder.button(
+        text="-15м",
+        callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 15) % 60}",
+    )
+    builder.adjust(4)
 
     # Подтвердить выбор
     builder.button(
         text="✅ Подтвердить",
         callback_data=f"confirm_time:{action}:{current_hour}:{current_minute}",
     )
-    builder.adjust(5)
-
+    builder.adjust(4, 2, 4, 1)
     return builder
 
 
