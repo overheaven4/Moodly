@@ -15,27 +15,27 @@ def time_picker_keyboard(
 
     # Часы
     builder.button(
-        text="-4️ч",
+        text="-4ч",
         callback_data=f"{action}:adjust_hour:{current_hour - 4}:{current_minute}",
     )    
     builder.button(
-        text="-1️ч",
+        text="-1ч",
         callback_data=f"{action}:adjust_hour:{current_hour - 1}:{current_minute}",
     )    
     builder.button(text=f"Часы: {current_hour}", callback_data="noop")
     builder.button(
-        text="+1️ч",
+        text="+1ч",
         callback_data=f"{action}:adjust_hour:{current_hour + 1}:{current_minute}",
     )
     builder.button(
-        text="+4️ч",
+        text="+4ч",
         callback_data=f"{action}:adjust_hour:{current_hour + 4}:{current_minute}",
     )
     builder.adjust(5)
 
     # Минуты
     builder.button(
-        text="-1️5️м",
+        text="-15м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 15) % 60}",
     )
     builder.button(
@@ -44,11 +44,11 @@ def time_picker_keyboard(
     )
     builder.button(text=f"Мин: {current_minute}", callback_data="noop")
     builder.button(
-        text="+5️м",
+        text="+5м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute + 5) % 60}",
     )
     builder.button(
-        text="+1️5️м",
+        text="+15м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute + 15) % 60}",
     )
     builder.adjust(5)
