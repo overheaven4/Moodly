@@ -21,6 +21,8 @@ from app.handlers.start import get_main_keyboard
 
 import random
 
+delta = timedelta(hours=3)
+
 # Настройка логирования
 logger = logging.getLogger(__name__)
 
@@ -116,7 +118,7 @@ async def create_mood_chart(results):
     if not results:
         return None
 
-    dates = [row["created_at"] for row in results]
+    dates = [(row["created_at"] + delta) for row in results]
     moods = [row["answer"] for row in results]
 
     plt.figure(figsize=(10, 5))
@@ -208,7 +210,7 @@ async def send_stats(message: types.Message):
         if results:
             stats = "\n".join(
                 [
-                    f"{row[crat].strftime(f'{WEEKDAYS[row[crat].strftime(a)]} %d.%m, %H:%M')} - {BUTTON_TEXTS[row['answer']]}"
+                    f"{(row[crat] + delta).strftime(f'{WEEKDAYS[(row[crat] + delta).strftime(a)]} %d.%m, %H:%M')} - {BUTTON_TEXTS[row['answer']]}"
                     for row in results
                 ]
             )
