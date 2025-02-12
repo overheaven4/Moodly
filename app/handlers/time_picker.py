@@ -6,8 +6,6 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.database import get_database_connection
 
-
-# Универсальная клавиатура выбора времени
 def time_picker_keyboard(
     current_hour: int, current_minute: int, action: str
 ) -> InlineKeyboardBuilder:
@@ -29,11 +27,10 @@ def time_picker_keyboard(
         text="+15м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute + 15) % 60}",
     )
-    builder.adjust(4)
 
     builder.button(text=f"Часы: {current_hour}", callback_data="noop")
+    
     builder.button(text=f"Мин: {current_minute}", callback_data="noop")
-    builder.adjust(2)
 
     builder.button(
         text="-4ч",
@@ -53,7 +50,6 @@ def time_picker_keyboard(
     )
     builder.adjust(4)
 
-    # Подтвердить выбор
     builder.button(
         text="✅ Подтвердить",
         callback_data=f"confirm_time:{action}:{current_hour}:{current_minute}",
@@ -62,7 +58,6 @@ def time_picker_keyboard(
     return builder
 
 
-# Начало выбора времени
 async def start_time_picker(message: Message, action: str):
     initial_hour = 9
     initial_minute = 15
@@ -73,7 +68,6 @@ async def start_time_picker(message: Message, action: str):
     )
 
 
-# Обработка изменения часов
 async def adjust_hour(callback: CallbackQuery):
     action, current_hour, current_minute = (
         callback.data.split(":")[0],
@@ -89,7 +83,7 @@ async def adjust_hour(callback: CallbackQuery):
     await callback.answer()
 
 
-# Обработка изменения минут
+
 async def adjust_minute(callback: CallbackQuery):
     action, current_hour, current_minute = (
         callback.data.split(":")[0],
@@ -105,23 +99,19 @@ async def adjust_minute(callback: CallbackQuery):
     await callback.answer()
 
 
-# Подтверждение времени
 async def confirm_time(callback: CallbackQuery):
     db = await get_database_connection()
     user_id = callback.from_user.id
 
-    # Извлечение данных из callback_data
     data = callback.data.split(":")
-    action = data[1]  # Теперь action извлекается правильно
+    action = data[1]  
     current_hour = int(data[2])
     current_minute = int(data[3])
 
-    # Формируем время с ведущими нулями
-    time_str = f"{current_hour:02d}:{current_minute:02d}:00"  # Всегда добавляем секунды
+    time_str = f"{current_hour:02d}:{current_minute:02d}:00" 
     selected_time = time.fromisoformat(time_str)
 
     if action == "register":
-        # Регистрация пользователя
         await db.execute(
             """
             INSERT INTO users (id, notification_time)
@@ -135,7 +125,6 @@ async def confirm_time(callback: CallbackQuery):
             f"Вы успешно зарегистрированы! Выбранное время: {selected_time.strftime('%H:%M')}."
         )
     elif action == "change_time":
-        # Обновление времени уведомления
         await db.execute(
             """
             UPDATE users SET notification_time = $1 WHERE id = $2
@@ -150,7 +139,6 @@ async def confirm_time(callback: CallbackQuery):
     await callback.answer()
 
 
-# Регистрация хендлеров
 def register_handlers(dp: Dispatcher):
     dp.callback_query.register(adjust_hour, lambda c: "adjust_hour" in c.data)
     dp.callback_query.register(adjust_minute, lambda c: "adjust_minute" in c.data)

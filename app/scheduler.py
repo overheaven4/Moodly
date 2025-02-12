@@ -4,7 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.bot import bot
 from app.database import get_database_connection
-from app.handlers.survey import BUTTON_TEXTS  # Импортируем словарь с текстами кнопок
+from app.handlers.survey import BUTTON_TEXTS 
 
 scheduler = AsyncIOScheduler()
 
@@ -13,13 +13,11 @@ async def send_daily_survey():
 
     db = await get_database_connection()
     try:
-        # Получаем всех пользователей и их время уведомлений
         users = await db.fetch("SELECT id, notification_time FROM users")
         for user in users:
             user_id = user["id"]
             notification_time = user["notification_time"]
 
-            # Проверяем, что текущее время совпадает с временем уведомления
             now = datetime.now().time()
             if (
                 now.hour == notification_time.hour
@@ -38,11 +36,9 @@ async def send_weekly_statistics():
 
     db = await get_database_connection()
     try:
-        # Получаем всех пользователей
         users = await db.fetch("SELECT id FROM users")
         for user in users:
             user_id = user["id"]
-            # Получаем записи за последнюю неделю
             results = await db.fetch(
                 """
                 SELECT answer, created_at FROM survey_results
@@ -53,7 +49,6 @@ async def send_weekly_statistics():
             )
 
             if results:
-                # Формируем статистику с текстами кнопок
                 stats = "\n".join(
                     [
                         f"{row['created_at']}: {BUTTON_TEXTS[row['answer']]}"
@@ -76,12 +71,10 @@ async def send_weekly_statistics():
 
 
 def setup_scheduler():
-    # Ежедневный опрос (проверка каждую минуту)
-    scheduler.add_job(send_daily_survey, "cron", minute="*")  # Проверка каждую минуту
+    scheduler.add_job(send_daily_survey, "cron", minute="*") 
 
-    # Еженедельная статистика
     scheduler.add_job(
         send_weekly_statistics, "cron", day_of_week="sun", hour=10
-    )  # Отправка каждое воскресенье в 10 утра
+    )
 
     scheduler.start()

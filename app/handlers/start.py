@@ -4,9 +4,6 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 
 
 def get_main_keyboard():
-    """
-    Создает клавиатуру с основными командами.
-    """
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="/start")],
@@ -22,9 +19,6 @@ def get_main_keyboard():
 
 
 async def start_handlers(message: types.Message):
-    """
-    Обработчик команды /start.
-    """
     welcome_text = (
         "Добро пожаловать! Я помогу отслеживать ваше эмоциональное состояние.\n\n"
         "Вот основные команды, которые вы можете использовать:\n"

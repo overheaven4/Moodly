@@ -5,11 +5,9 @@ from asyncpg import connect
 
 from app.config import config
 
-# Настройка логирования
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# SQL-запросы для создания таблиц
 CREATE_USERS_TABLE = """
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT PRIMARY KEY,

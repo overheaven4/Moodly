@@ -21,17 +21,12 @@ from app.handlers.start import get_main_keyboard
 
 import random
 
-delta = timedelta(hours=3)
-
-# Настройка логирования
 logger = logging.getLogger(__name__)
 
-# Применение стиля Cyberpunk
 plt.style.use("cyberpunk")
 
 class SurveyState(StatesGroup):
     in_progress = State()
-
 
 BUTTON_TEXTS = {
     1: "😭",
@@ -95,11 +90,11 @@ negative_motivations = [
     "Верь в себя и свои силы! 🙏"
 ]
 
+delta = timedelta(hours=3)
 
 crat = "created_at"
 a = "%a"
 
-# Кнопки
 keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
