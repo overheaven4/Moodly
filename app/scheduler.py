@@ -4,8 +4,13 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.bot import bot
 from app.database import get_database_connection
-from app.handlers.survey import BUTTON_TEXTS 
-
+from app.handlers.survey import (
+    BUTTON_TEXTS, 
+    crat, 
+    delta, 
+    a, 
+    WEEKDAYS,
+)
 scheduler = AsyncIOScheduler()
 
 
@@ -48,22 +53,17 @@ async def send_weekly_statistics():
                 user_id,
             )
 
-            if results:
-                stats = "\n".join(
-                    [
-                        f"{row['created_at']}: {BUTTON_TEXTS[row['answer']]}"
-                        for row in results
-                    ]
-                )
-                average_mood = sum(row["answer"] for row in results) / len(results)
-                await bot.send_message(
-                    user_id,
-                    f"Ваша статистика за последнюю неделю:\n{stats}\n\nСреднее настроение: {BUTTON_TEXTS[round(average_mood)]}",
-                )
-            else:
-                await bot.send_message(
-                    user_id, "У вас нет записей за последнюю неделю."
-                )
+            stats = "\n".join(
+                [
+                    f"{(row[crat] + delta).strftime(f'{WEEKDAYS[(row[crat] + delta).strftime(a)]} %d.%m, %H:%M')} - {BUTTON_TEXTS[row['answer']]}"
+                    for row in results
+                ]
+            )
+            average_mood = sum(row["answer"] for row in results) / len(results)
+            await bot.send_message(
+                user_id,
+                f"Ваша статистика за последнюю неделю:\n{stats}\n\nСреднее настроение: {BUTTON_TEXTS[round(average_mood)]}",
+            )
     except Exception as e:
         print(f"Ошибка при отправке статистики: {e}")
     finally:
