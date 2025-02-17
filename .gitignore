@@ -174,3 +174,5 @@ cython_debug/
 .pypirc
 docker-compose.yml
 Dockerfile
+
+.~lock*
