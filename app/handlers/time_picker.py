@@ -6,6 +6,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.database import get_database_connection
 
+
 def time_picker_keyboard(
     current_hour: int, current_minute: int, action: str
 ) -> InlineKeyboardBuilder:
@@ -29,21 +30,21 @@ def time_picker_keyboard(
     )
 
     builder.button(text=f"Часы: {current_hour}", callback_data="noop")
-    
+
     builder.button(text=f"Мин: {current_minute}", callback_data="noop")
 
     builder.button(
         text="-4ч",
         callback_data=f"{action}:adjust_hour:{current_hour - 4}:{current_minute}",
-    )    
+    )
     builder.button(
         text="-1ч",
         callback_data=f"{action}:adjust_hour:{current_hour - 1}:{current_minute}",
-    )   
+    )
     builder.button(
         text="-5м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 5) % 60}",
-    ) 
+    )
     builder.button(
         text="-15м",
         callback_data=f"{action}:adjust_minute:{current_hour}:{(current_minute - 15) % 60}",
@@ -83,7 +84,6 @@ async def adjust_hour(callback: CallbackQuery):
     await callback.answer()
 
 
-
 async def adjust_minute(callback: CallbackQuery):
     action, current_hour, current_minute = (
         callback.data.split(":")[0],
@@ -104,11 +104,11 @@ async def confirm_time(callback: CallbackQuery):
     user_id = callback.from_user.id
 
     data = callback.data.split(":")
-    action = data[1]  
+    action = data[1]
     current_hour = int(data[2])
     current_minute = int(data[3])
 
-    time_str = f"{current_hour:02d}:{current_minute:02d}:00" 
+    time_str = f"{current_hour:02d}:{current_minute:02d}:00"
     selected_time = time.fromisoformat(time_str)
 
     if action == "register":

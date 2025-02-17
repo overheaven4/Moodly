@@ -1,5 +1,6 @@
 import io
 import logging
+import random
 import statistics
 from datetime import datetime, timedelta
 
@@ -19,14 +20,14 @@ from aiogram.types import (
 from app.database import get_database_connection
 from app.handlers.start import get_main_keyboard
 
-import random
-
 logger = logging.getLogger(__name__)
 
 plt.style.use("cyberpunk")
 
+
 class SurveyState(StatesGroup):
     in_progress = State()
+
 
 BUTTON_TEXTS = {
     1: "😭",
@@ -69,7 +70,7 @@ positive_motivations = [
     "Пусть твой свет светит ярче! ☀️",
     "Каждый день - новый шанс! 😉",
     "Ты создаешь своё счастье! 😉",
-    "Доступно всё, что ты хочешь! 😇"
+    "Доступно всё, что ты хочешь! 😇",
 ]
 
 negative_motivations = [
@@ -87,7 +88,7 @@ negative_motivations = [
     "Каждый день – новая возможность 👽",
     "Не бойся просить о помощи 🤝",
     "Давай найдем решение вместе 🤝",
-    "Верь в себя и свои силы! 🙏"
+    "Верь в себя и свои силы! 🙏",
 ]
 
 delta = timedelta(hours=3)
@@ -98,11 +99,11 @@ a = "%a"
 keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
-        KeyboardButton(text=BUTTON_TEXTS[1]),
-        KeyboardButton(text=BUTTON_TEXTS[2]),
-        KeyboardButton(text=BUTTON_TEXTS[3]),
-        KeyboardButton(text=BUTTON_TEXTS[4]),
-        KeyboardButton(text=BUTTON_TEXTS[5])
+            KeyboardButton(text=BUTTON_TEXTS[1]),
+            KeyboardButton(text=BUTTON_TEXTS[2]),
+            KeyboardButton(text=BUTTON_TEXTS[3]),
+            KeyboardButton(text=BUTTON_TEXTS[4]),
+            KeyboardButton(text=BUTTON_TEXTS[5]),
         ],
     ],
     resize_keyboard=True,
@@ -121,7 +122,7 @@ async def create_mood_chart(results):
     plt.title("График настроения за неделю")
     plt.xlabel("Дата")
     plt.ylabel("Настроение")
-    plt.yticks(range(1, 6), [BUTTON_TEXTS2[i] for i in range(1, 6)]) 
+    plt.yticks(range(1, 6), [BUTTON_TEXTS2[i] for i in range(1, 6)])
     plt.grid(True)
     mplcyberpunk.make_lines_glow()
     mplcyberpunk.add_gradient_fill(alpha_gradientglow=0.38)
@@ -133,7 +134,7 @@ async def create_mood_chart(results):
     return buf
 
 
-async def calculate_mood_trend(results): 
+async def calculate_mood_trend(results):
     if not results:
         return "нет данных"
 
@@ -158,7 +159,7 @@ async def calculate_mood_trend(results):
         return "стабильный"
 
 
-async def calculate_mood_stability(results): 
+async def calculate_mood_stability(results):
     if not results:
         return None
 
@@ -166,7 +167,7 @@ async def calculate_mood_stability(results):
     return statistics.stdev(answers) if len(answers) > 1 else 0
 
 
-async def calculate_weighted_average(results): 
+async def calculate_weighted_average(results):
     total_weighted_sum = 0
     total_weight = 0
 
@@ -176,7 +177,7 @@ async def calculate_weighted_average(results):
 
         days_ago = (datetime.now() - created_at).days
         if days_ago <= 2:
-            weight = 1.5 
+            weight = 1.5
         else:
             weight = 1.0
 
@@ -184,7 +185,7 @@ async def calculate_weighted_average(results):
         total_weight += weight
 
     if total_weight == 0:
-        return None 
+        return None
 
     return total_weighted_sum / total_weight
 
@@ -216,10 +217,14 @@ async def send_stats(message: types.Message):
             )
 
             trend = await calculate_mood_trend(results)
-            
-            if trend == "отрицательный" or round(weighted_avg) == 1 or round(weighted_avg) == 2:
+
+            if (
+                trend == "отрицательный"
+                or round(weighted_avg) == 1
+                or round(weighted_avg) == 2
+            ):
                 phrase = random.choice(negative_motivations)
-            else: 
+            else:
                 phrase = random.choice(positive_motivations)
 
             stability = await calculate_mood_stability(results)
@@ -251,7 +256,6 @@ async def send_stats(message: types.Message):
         await message.reply("Произошла ошибка при получении статистики.")
     finally:
         await db.close()
-
 
 
 async def survey_handler(message: types.Message, state: FSMContext):
@@ -297,7 +301,7 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
                 await message.reply(
                     "Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь с помощью команды /register."
                 )
-                return 
+                return
 
             logger.info(f"Сохранение настроения пользователя {user_id}: {mood}")
             await db.execute(
@@ -310,7 +314,7 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
             )
             await message.reply(
                 f"Спасибо за ваш ответ! Ваше настроение: {BUTTON_TEXTS[mood]}",
-                reply_markup=get_main_keyboard(),  
+                reply_markup=get_main_keyboard(),
             )
 
             await state.clear()
@@ -319,7 +323,7 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
             logger.error(f"Ошибка при сохранении в БД: {e}")
             await message.reply(
                 "Произошла ошибка при сохранении вашего ответа. Пожалуйста, попробуйте позже.",
-                reply_markup=get_main_keyboard(), 
+                reply_markup=get_main_keyboard(),
             )
     else:
         logger.warning(
@@ -327,7 +331,7 @@ async def handle_survey_response(message: types.Message, state: FSMContext):
         )
         await message.reply(
             "Пожалуйста, выберите один из предложенных смайликов.",
-            reply_markup=keyboard,  
+            reply_markup=keyboard,
         )
 
 
